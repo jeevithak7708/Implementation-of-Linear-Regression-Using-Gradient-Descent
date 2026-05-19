@@ -20,77 +20,44 @@ Initialize w, b, learning rate and dataset.
 
 ## Program:
 ```
-DEVOLPED BY : JEEVITHA K
-REGISTER NO: 212225040149
+DEVELOPED BY : JEEVITHA K
 
+REGISTER NO : 212225040149
 
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
-x = np.array([10000, 20000, 30000, 40000, 50000, 60000])
-y = np.array([15000, 30000, 45000, 55000, 70000, 80000])
-x_mean = np.mean(x)
-x_std = np.std(x)
-x = (x - x_mean) / x_std
-
-y_mean = np.mean(y)
-y_std = np.std(y)
-y = (y - y_mean) / y_std
-w = 0.0
-b = 0.0
-
-alpha = 0.01
-epochs = 1000
-n = len(x)
-
-losses = []
-
-for _ in range(epochs):
-    y_hat = w * x + b
-    
-    loss = np.mean((y_hat - y) ** 2)
-    losses.append(loss)
-    
-    dw = (2/n) * np.sum((y_hat - y) * x)
-    db = (2/n) * np.sum(y_hat - y)
-    
-    w -= alpha * dw
-    b -= alpha * db
-
-plt.figure(figsize=(12,5))
-
-plt.subplot(1,2,1)
-plt.plot(losses)
-plt.xlabel("Iterations")
-plt.ylabel("Loss (MSE)")
-plt.title("Loss vs Iterations")
-
-plt.subplot(1,2,2)
-plt.scatter(x, y)
-
-x_sorted = np.argsort(x)
-plt.plot(x[x_sorted], (w*x + b)[x_sorted], color='red')
-
-plt.xlabel("R&D Spend (scaled)")
-plt.ylabel("Profit (scaled)")
-plt.title("Linear Regression Fit")
-
-plt.tight_layout()
+data = pd.read_csv("50_Startups.csv")
+X=data['R&D Spend'].values
+Y=data['Profit'].values
+X=(X-X.mean())/X.std()
+m=0
+b=0
+lenr=0.01
+epo=1000
+n = len(X)
+for i in range(epo):
+    Y_pred=(m*X)+b
+    dm=(-2/n)*np.sum(X*(Y-Y_pred))
+    db=(-2/n)*np.sum(Y-Y_pred)
+    m=m-lenr*dm
+    b=b-lenr*db
+print("Slope:",m)
+print("Intercept:",b)
+Y_pred=m*X+b
+plt.scatter(X,Y,label="Actual Data")
+plt.plot(X,Y_pred,label="Best fitted")
+plt.xlabel("R&D Spend")
+plt.ylabel("Profit")
+plt.title("Gradient descent")
+plt.legend()
 plt.show()
-new_value = float(input("Enter R&D Spend: "))
-new_scaled = (new_value - x_mean) / x_std
-
-pred = w * new_scaled + b
-pred = pred * y_std + y_mean
-
-print("Predicted Profit:", pred)
-
-print("Final weight (w):", w)
-print("Final bias (b):", b) 
 
 ```
 
 ## Output:
-<img width="1488" height="608" alt="image" src="https://github.com/user-attachments/assets/2e77def3-397b-46fb-b836-9f93043aa0a7" />
+<img width="987" height="759" alt="Screenshot 2026-05-19 183548" src="https://github.com/user-attachments/assets/597776eb-60c4-42a8-85ed-bc364c4f2d09" />
+
 
 
 
