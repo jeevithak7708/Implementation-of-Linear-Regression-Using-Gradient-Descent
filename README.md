@@ -24,39 +24,59 @@ DEVELOPED BY : JEEVITHA K
 
 REGISTER NO : 212225040149
 
+
+
+# Import necessary modules
 import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-data = pd.read_csv("50_Startups.csv")
-X=data['R&D Spend'].values
-Y=data['Profit'].values
-X=(X-X.mean())/X.std()
-m=0
-b=0
-lenr=0.01
-epo=1000
-n = len(X)
-for i in range(epo):
-    Y_pred=(m*X)+b
-    dm=(-2/n)*np.sum(X*(Y-Y_pred))
-    db=(-2/n)*np.sum(Y-Y_pred)
-    m=m-lenr*dm
-    b=b-lenr*db
-print("Slope:",m)
-print("Intercept:",b)
-Y_pred=m*X+b
-plt.scatter(X,Y,label="Actual Data")
-plt.plot(X,Y_pred,label="Best fitted")
-plt.xlabel("R&D Spend")
-plt.ylabel("Profit")
-plt.title("Gradient descent")
-plt.legend()
-plt.show()
+
+# Sample dataset
+# Features: [Hours Studied, Attendance, Previous Marks]
+X = np.array([
+    [2, 80, 50],
+    [3, 60, 40],
+    [5, 90, 70],
+    [7, 85, 80],
+    [9, 95, 90]], dtype=float)
+# Target: Marks Scored
+y = np.array([50, 45, 70, 80, 95], dtype=float)
+
+# Feature normalization
+X_mean = X.mean(axis=0)
+X_std = X.std(axis=0)
+X = (X - X_mean) / X_std
+
+# Add bias term (intercept)
+X = np.c_[np.ones(X.shape[0]), X]  # shape becomes (n_samples, n_features + 1)
+
+# Initialize weights
+n_features = X.shape[1]
+weights = np.zeros(n_features)
+
+# Hyperparameters
+learning_rate = 0.01
+epochs = 1000
+
+# Stochastic Gradient Descent
+for epoch in range(epochs):
+    for i in range(X.shape[0]):
+        xi = X[i]
+        yi = y[i]
+        y_pred = np.dot(xi, weights)
+        error = y_pred - yi
+        # Update weights
+        weights -= learning_rate * error * xi
+print("Trained Weights (including intercept):", weights)
+
+# Make predictions
+y_pred_all = np.dot(X, weights)
+print("Predicted values:", y_pred_all)
+
 
 ```
 
 ## Output:
-<img width="987" height="759" alt="Screenshot 2026-05-19 183548" src="https://github.com/user-attachments/assets/597776eb-60c4-42a8-85ed-bc364c4f2d09" />
+
+<img width="1136" height="64" alt="Screenshot 2026-05-25 074519" src="https://github.com/user-attachments/assets/6306814c-2a13-4f41-8efb-3c5d3f2e9f0e" />
 
 
 
